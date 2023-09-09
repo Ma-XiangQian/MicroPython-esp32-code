@@ -1,6 +1,6 @@
 import network
     
-def connect(name: str,password: str):
+def connect(name: str,password: str,callback=None):
     # 设置Wi-Fi
     wlan = network.WLAN(network.STA_IF)
     # 开启Wi-Fi
@@ -9,26 +9,26 @@ def connect(name: str,password: str):
     wlanList = []
     # 获取附近Wi-Fi
     for w in wlan.scan():
-        wlanList.append(w[0].decode("utf-8"))
-    # 判断附近是否有该Wi-Fi
-    if wlanList.count(name):
-        # 连接Wi-Fi
-        wlan.connect(name,password)
-        # 等待连接成功！
-        while not wlan.isconnected():
-            pass
-        # 判断Wi-Fi是否连接成功
-        if wlan.isconnected():
-            print(f"Wi-Fi: {name} 连接成功！")
-        else:
-            print(f"Wi-Fi: {name} 连接失败！")
-    else:
-        print(f"Wi-Fi: {name} 没有信号！")
+        w = w[0].decode("utf-8")
+        if w:
+            wlanList.append(w)
+    # 判断Wi-Fi信号
+    if not name in wlanList:
+        print(f"Wi-Fi: {name} 不在服务区！")
+        return wlan
+    # 判断是否连接Wi-Fi
+    if wlan.isconnected():
+        if wlan.config("ssid") in wlanList:
+            if callback:
+                callback()
+            print(f"Wi-Fi: {wlan.config('ssid')} 连接成功！")
+            return wlan
+    # 连接Wi-Fi
+    wlan.disconnect()
+    wlan.connect(name,password)
+    while not wlan.isconnected():
+        pass
+    if callback:
+        callback()
+    print(f"Wi-Fi: {wlan.config('ssid')} 连接成功！")
     return wlan
-        
-        
-        
-
-
-        
-    
