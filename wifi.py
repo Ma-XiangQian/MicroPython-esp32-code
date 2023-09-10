@@ -13,15 +13,15 @@ def connect(name: str,password: str,callback=None):
         if w:
             wlanList.append(w)
     # 判断Wi-Fi信号
-    if not name in wlanList:
-        print(f"Wi-Fi: {name} 不在服务区！")
-        return wlan
+    # if not name in wlanList:
+    #     print(f"Wi-Fi: {name} 不在服务区！")
+    #     return wlan
     # 判断是否连接Wi-Fi
     if wlan.isconnected():
-        if wlan.config("ssid") in wlanList:
+        if wlan.config("essid") in wlanList:
             if callback:
                 callback()
-            print(f"Wi-Fi: {wlan.config('ssid')} 连接成功！")
+            print(f"Wi-Fi: {wlan.config('essid')} 连接成功！")
             return wlan
     # 连接Wi-Fi
     wlan.disconnect()
@@ -30,5 +30,5 @@ def connect(name: str,password: str,callback=None):
         pass
     if callback:
         callback()
-    print(f"Wi-Fi: {wlan.config('ssid')} 连接成功！")
+    print(f"Wi-Fi: {wlan.config('essid')} 连接成功！")
     return wlan
