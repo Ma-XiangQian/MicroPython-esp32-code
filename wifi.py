@@ -13,9 +13,9 @@ def connect(name: str,password: str,callback=None):
         if w:
             wlanList.append(w)
     # 判断Wi-Fi信号
-    # if not name in wlanList:
-    #     print(f"Wi-Fi: {name} 不在服务区！")
-    #     return wlan
+    if not name in wlanList:
+        print(f"Wi-Fi: {name} 不在服务区！")
+        return wlan
     # 判断是否连接Wi-Fi
     if wlan.isconnected():
         if wlan.config("essid") in wlanList:
